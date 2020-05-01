@@ -29,15 +29,17 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $locale = app()->getLocale();
+
         if(cache()->has('articles')) {
-            $articles = cache('articles');
+            $articles = cache('articles.'.$locale);
         } else {
-            $articles = Article::latest()->take(8)->get();
-            cache(['articles' => $articles] , Carbon::now()->addMinutes(10));
+            $articles = Article::whereLang($locale)->latest()->take(8)->get();
+            cache(["articles.$locale"  => $articles] , Carbon::now()->addMinutes(10));
         }
 
-        if(cache()->has('courses')) {
-            $courses = cache('courses');
+        if(cache()->has('courses'.$locale)) {
+            $courses = cache('courses'.$locale);
         } else {
             $courses = Course::latest()->take(4)->get();
             cache(['courses' => $courses] , Carbon::now()->addMinutes(10));
