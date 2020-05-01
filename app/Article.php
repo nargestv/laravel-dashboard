@@ -38,6 +38,7 @@ class Article extends Model
         return $this->belongsTo(User::class);
     }
     public function path(){
-        return "/article/$this->slug";
+        $locale = app()->getLocale();
+        return "/$locale/article/$this->slug";
     }
 }
